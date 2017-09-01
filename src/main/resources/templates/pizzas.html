@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+	<h1>Create your pizza</h1>
+
+	<form action="" method="post" th:object="${pizza}">
+		<fieldset>
+			Size: <select>
+				<option value=""></option>
+				<option th:each="pizzaSize: ${pizzaSizes}"
+					th:value="${pizzaSize.description}"
+					th:text="${pizzaSize.description}"></option>
+			</select> <br /> Crust Type: <select>
+				<option value=""></option>
+				<option th:each="pizzaCrustType: ${pizzaCrustTypes}"
+					th:value="${pizzaCrustType.description}"
+					th:text="${pizzaCrustType.description}"></option>
+
+			</select>
+		</fieldset>
+		<fieldset>
+			Toppings:
+			<div th:each="topping: ${toppings}">
+				<input type="checkbox" th:value="${topping.description}"
+					th:text="${topping.description}" /> <br />
+			</div>
+		</fieldset>
+	</form>
+</body>
+</html>

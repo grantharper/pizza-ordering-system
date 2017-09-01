@@ -1,0 +1,17 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+	<h1>Create your order</h1>
+  
+  <div th:each="pizza: ${order.pizzas}">
+    Pizza Id: <span th:text="${pizza.pizzaId}"></span>
+  </div>
+  
+  <form action="" method="post">
+    <button>Add a Pizza</button>
+  </form>
+	
+</body>
+</html>
