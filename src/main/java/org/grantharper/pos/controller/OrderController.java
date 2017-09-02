@@ -22,9 +22,11 @@ public class OrderController
   OrderRepository orderRepository;
   
   @RequestMapping(value = "", method = RequestMethod.GET)
-  public String orderGet(ModelMap model){
+  public String orderGet(ModelMap model, HttpServletRequest request){
+    Customer customer = (Customer) request.getSession().getAttribute("customer");
     
     Order order = new Order();
+    order.setCustomer(customer);
     model.put("order", order);
     
     return "orders";

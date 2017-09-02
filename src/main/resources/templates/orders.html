@@ -3,6 +3,7 @@
 <head>
 </head>
 <body>
+  <h3 th:text="${order.customer.firstName}"></h3>
 	<h1>Create your order</h1>
   
   <div th:each="pizza: ${order.pizzas}">
