@@ -1,6 +1,7 @@
 package org.grantharper.pos.domain;
 
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,7 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 @Entity
-public class Pizza
+public class Pizza implements Comparable<Pizza>
 {
 
   @Id
@@ -28,7 +29,7 @@ public class Pizza
   private String crustType;
   
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "pizza")
-  private Set<Topping> toppings;
+  private Set<Topping> toppings = new TreeSet<>();
   
   @ManyToOne
   @JoinColumn(name = "order_id")
@@ -82,6 +83,48 @@ public class Pizza
   public void setToppings(Set<Topping> toppings)
   {
     this.toppings = toppings;
+  }
+
+  @Override
+  public int compareTo(Pizza otherPizza)
+  {
+    if(this.getPizzaId() == null){
+      return 1;
+    }
+    if( otherPizza.getPizzaId() == null){
+      return -1;
+    }
+    return this.getPizzaId().compareTo(otherPizza.getPizzaId());
+    
+
+  }
+
+  @Override
+  public int hashCode()
+  {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((pizzaId == null) ? 0 : pizzaId.hashCode());
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj)
+  {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    Pizza other = (Pizza) obj;
+    if (pizzaId == null)
+    {
+      if (other.pizzaId != null)
+        return false;
+    } else if (!pizzaId.equals(other.pizzaId))
+      return false;
+    return true;
   }
   
   

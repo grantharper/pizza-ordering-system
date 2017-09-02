@@ -28,7 +28,7 @@ public class CustomerController
   public String postCustomers(ModelMap model, @ModelAttribute("customer") Customer customer){
     
     customerRepo.save(customer);
-    return "redirect:/customers";
+    return "redirect:/orders";
   }
   
   @RequestMapping(value = "/", method = RequestMethod.GET)

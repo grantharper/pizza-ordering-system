@@ -1,6 +1,7 @@
 package org.grantharper.pos.domain;
 
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -29,7 +30,7 @@ public class Order
   private Customer customer;
   
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER , mappedBy = "order")
-  private Set<Pizza> pizzas;
+  private Set<Pizza> pizzas = new TreeSet<>();
 
   public Long getOrderId()
   {

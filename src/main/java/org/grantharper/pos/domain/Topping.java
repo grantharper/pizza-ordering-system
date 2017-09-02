@@ -9,18 +9,18 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class Topping
+public class Topping implements Comparable<Topping>
 {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "topping_id")
   private Long toppingId;
-  
+
   private String description;
-  
+
   private Double price;
-  
+
   @ManyToOne
   @JoinColumn(name = "pizza_id")
   private Pizza pizza;
@@ -64,7 +64,50 @@ public class Topping
   {
     this.price = price;
   }
+
+  @Override
+  public int compareTo(Topping otherTopping)
+  {
+    if (otherTopping.getToppingId() == null)
+    {
+      return -1;
+    }
+    if (this.getToppingId() == null)
+    {
+      return 1;
+    }
+    return this.getToppingId().compareTo(otherTopping.getToppingId());
+
+  }
+
+  @Override
+  public int hashCode()
+  {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((toppingId == null) ? 0 : toppingId.hashCode());
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj)
+  {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    Topping other = (Topping) obj;
+    if (toppingId == null)
+    {
+      if (other.toppingId != null)
+        return false;
+    } else if (!toppingId.equals(other.toppingId))
+      return false;
+    return true;
+  }
   
   
-  
+
 }

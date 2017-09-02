@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -36,6 +37,21 @@ public class OrderController
     order.setCustomer(customer);
     
     orderRepository.save(order);
+    
+    return "redirect:/orders/" + order.getOrderId() + "/pizzas";
+  }
+  
+  @RequestMapping(value = "/{orderId}", method = RequestMethod.GET)
+  public String orderGetWithId(ModelMap model, @PathVariable Long orderId){
+    Order order = orderRepository.findOne(orderId);
+
+    model.put("order", order);
+    
+    return "orders";
+  }
+  
+  @RequestMapping(value = "/{orderId}", method = RequestMethod.POST)
+  public String orderPostWithId(ModelMap model, HttpServletRequest request, @ModelAttribute Order order, @PathVariable Long orderId){
     
     return "redirect:/orders/" + order.getOrderId() + "/pizzas";
   }
