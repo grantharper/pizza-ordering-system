@@ -46,7 +46,7 @@ public class PizzaController
     Order order = orderRepo.findOne(orderId);
     for (Topping topping : pizza.getToppings())
     {
-      topping.setPizza(pizza);
+      topping.getPizzas().add(pizza);
     }
     pizza.setOrder(order);
     order.getPizzas().add(pizza);

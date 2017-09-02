@@ -1,12 +1,16 @@
 package org.grantharper.pos.domain;
 
+import java.util.Set;
+import java.util.TreeSet;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.ManyToMany;
 
 @Entity
 public class Topping implements Comparable<Topping>
@@ -21,18 +25,17 @@ public class Topping implements Comparable<Topping>
 
   private Double price;
 
-  @ManyToOne
-  @JoinColumn(name = "pizza_id")
-  private Pizza pizza;
+  @ManyToMany(cascade = CascadeType.ALL, mappedBy = "toppings")
+  private Set<Pizza> pizzas = new TreeSet<>();
 
-  public Pizza getPizza()
+  public Set<Pizza> getPizzas()
   {
-    return pizza;
+    return pizzas;
   }
 
-  public void setPizza(Pizza pizza)
+  public void setPizzas(Set<Pizza> pizzas)
   {
-    this.pizza = pizza;
+    this.pizzas = pizzas;
   }
 
   public Long getToppingId()
@@ -107,7 +110,5 @@ public class Topping implements Comparable<Topping>
       return false;
     return true;
   }
-  
-  
 
 }

@@ -11,8 +11,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 @Entity
 public class Pizza implements Comparable<Pizza>
@@ -28,7 +29,8 @@ public class Pizza implements Comparable<Pizza>
   @Column(name = "crust_type")
   private String crustType;
   
-  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "pizza")
+  @ManyToMany(cascade = CascadeType.ALL)
+  @JoinTable(name = "pizza_topping", joinColumns=@JoinColumn(name = "pizza_id"), inverseJoinColumns = @JoinColumn(name = "topping_id"))
   private Set<Topping> toppings = new TreeSet<>();
   
   @ManyToOne
