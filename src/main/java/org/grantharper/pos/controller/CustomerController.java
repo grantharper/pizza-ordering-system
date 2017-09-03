@@ -21,7 +21,7 @@ public class CustomerController
   @RequestMapping(value = "/", method = RequestMethod.GET)
   public String getRoot(ModelMap model)
   {
-    return "redirect:/customers";
+    return "redirect:/orders";
   }
 
   @RequestMapping(value = "/customers", method = RequestMethod.GET)

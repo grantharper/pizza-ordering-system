@@ -1,5 +1,6 @@
 package org.grantharper.pos.domain;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -28,9 +29,27 @@ public class Customer
 
   @Column(name = "email_address")
   private String emailAddress;
+  
+  private String password;
+  
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "customer")
+  private Set<Authorities> authorities = new HashSet<>();
 
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "customer")
   private Set<Order> orders;
+
+  public Customer() {}
+  
+  public Customer(Customer customer)
+  {
+    this.customerId = customer.getCustomerId();
+    this.firstName = customer.getFirstName();
+    this.lastName = customer.getLastName();
+    this.emailAddress = customer.getEmailAddress();
+    this.password = customer.getPassword();
+    this.authorities = customer.getAuthorities();
+    this.orders = customer.getOrders();
+  }
 
   public Long getCustomerId()
   {
@@ -80,6 +99,26 @@ public class Customer
   public void setOrders(Set<Order> orders)
   {
     this.orders = orders;
+  }
+
+  public String getPassword()
+  {
+    return password;
+  }
+
+  public void setPassword(String password)
+  {
+    this.password = password;
+  }
+
+  public Set<Authorities> getAuthorities()
+  {
+    return authorities;
+  }
+
+  public void setAuthorities(Set<Authorities> authorities)
+  {
+    this.authorities = authorities;
   }
   
   
