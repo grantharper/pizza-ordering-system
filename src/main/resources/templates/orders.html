@@ -4,23 +4,52 @@
 </head>
 <body>
   <!-- <h3 th:text="${order.customer.firstName}"></h3> -->
-	<h1>Create your order</h1>
+	<h1>Orders Page</h1>
   <div th:replace="fragments/account :: logout"></div>
+  
+  <!-- This is for editing individual orders -->
+  <div th:if="${order} != null">
+  <div  th:each="pizza: ${order.pizzas}">
+  <fieldset>
+  <legend th:text="'Pizza #' + ${pizza.pizzaId}"></legend>
+  Size: <span th:text="${pizza.size}"></span> <br/>
+  Crust: <span th:text="${pizza.crustType}"></span> <br/>
+  Toppings: <span th:each="topping, status : ${pizza.toppings}" th:text="${status.last ? topping.description : topping.description + ', '}"></span> <br/>
+  Toppings: Bacon, Pepperoni, Sausage
+  </fieldset>
+  <br/>
+  </div>
+  <form th:action="@{/orders/} + ${order.orderId}" method="post">
+    <button>Add pizza to order</button>
+  </form>
+  <form th:action="@{/orders/} + ${order.orderId} + '/finalize'" method="post">
+    <button>Finalize order</button>
+  </form>
+  <a th:href="@{/orders}">Back to orders</a>
+  </div>
+  
+  
+  
+  <!-- This is for viewing and editing all orders -->
+  <div th:if="${orders} != null">
+  <form action="" method="post">
+    <button>Create new order</button>
+  </form>
+  <h1>All Orders</h1>
+	<div th:each="order: ${orders}">
+  <h2 th:text="'Order #' + ${order.orderId}"></h2>
+  <a th:if="${order.completed == false}" th:href="@{/orders/} + ${order.orderId}">Edit Order</a>
   <div th:each="pizza: ${order.pizzas}">
   <fieldset>
   <legend th:text="'Pizza #' + ${pizza.pizzaId}"></legend>
   Size: <span th:text="${pizza.size}"></span> <br/>
   Crust: <span th:text="${pizza.crustType}"></span> <br/>
   Toppings: <span th:each="topping, status : ${pizza.toppings}" th:text="${status.last ? topping.description : topping.description + ', '}"></span> <br/>
-  <!-- Toppings: Bacon, Pepperoni, Sausage -->
   </fieldset>
-  <br/>
   </div>
   
-  
-  <form action="" method="post">
-    <button>Add a Pizza</button>
-  </form>
-	
+  <hr/>
+  </div>
+  </div>
 </body>
 </html>

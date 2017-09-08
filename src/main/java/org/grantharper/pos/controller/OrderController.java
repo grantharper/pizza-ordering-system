@@ -1,5 +1,7 @@
 package org.grantharper.pos.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.grantharper.pos.domain.Customer;
@@ -23,11 +25,10 @@ public class OrderController
   
   @RequestMapping(value = "", method = RequestMethod.GET)
   public String orderGet(ModelMap model, HttpServletRequest request){
-    Customer customer = (Customer) request.getSession().getAttribute("customer");
+   
+    List<Order> orders = orderRepository.findAll();
     
-    Order order = new Order();
-    order.setCustomer(customer);
-    model.put("order", order);
+    model.put("orders", orders);
     
     return "orders";
   }
@@ -58,5 +59,16 @@ public class OrderController
     return "redirect:/orders/" + order.getOrderId() + "/pizzas";
   }
   
+  
+  @RequestMapping(value = "/{orderId}/finalize", method = RequestMethod.POST)
+  public String orderPostFinalize(ModelMap model, HttpServletRequest request, @PathVariable Long orderId){
+    Order order = orderRepository.findOne(orderId);
+    order.setCompleted(true);
+    orderRepository.save(order);
+    
+    //could finalize the price and send email (more order finalization tasks)
+    
+    return "redirect:/orders";
+  }
   
 }

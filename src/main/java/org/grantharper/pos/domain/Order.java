@@ -31,6 +31,11 @@ public class Order
   
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER , mappedBy = "order")
   private Set<Pizza> pizzas = new TreeSet<>();
+  
+  @Column(name = "final_price")
+  private Double finalPrice;
+  
+  private Boolean completed = false;
 
   public Long getOrderId()
   {
@@ -61,8 +66,28 @@ public class Order
   {
     this.pizzas = pizzas;
   }
-  
-  
+
+  public Double getFinalPrice()
+  {
+    return finalPrice;
+  }
+
+  public void setFinalPrice(Double finalPrice)
+  {
+    this.finalPrice = finalPrice;
+  }
+
+  public Boolean getCompleted()
+  {
+    return completed;
+  }
+
+  public void setCompleted(Boolean completed)
+  {
+    this.completed = completed;
+  }
+
+
   
   
 }
