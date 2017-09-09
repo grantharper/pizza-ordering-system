@@ -9,16 +9,7 @@
   
   <!-- This is for editing individual orders -->
   <div th:if="${order} != null">
-  <div  th:each="pizza: ${order.pizzas}">
-  <fieldset>
-  <legend th:text="'Pizza #' + ${pizza.pizzaId}"></legend>
-  Size: <span th:text="${pizza.size.description}"></span> <br/>
-  Crust: <span th:text="${pizza.crustType.description}"></span> <br/>
-  Toppings: <span th:each="topping, status : ${pizza.toppings}" th:text="${status.last ? topping.description : topping.description + ', '}"></span> <br/>
-  Price: <span th:text="'$ ' + ${pizza.price}"></span>
-  </fieldset>
-  <br/>
-  </div>
+  <div th:replace="fragments/pizza-details :: pizzaDetails"></div>
   <form th:action="@{/orders/} + ${order.orderId}" method="post">
     <button>Add pizza to order</button>
   </form>

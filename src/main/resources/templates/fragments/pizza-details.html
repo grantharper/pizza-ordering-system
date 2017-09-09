@@ -1,0 +1,18 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+  <div th:fragment="pizzaDetails"  th:each="pizza: ${order.pizzas}">
+  <fieldset>
+  <legend th:text="'Pizza #' + ${pizza.pizzaId}"></legend>
+  Size: <span th:text="${pizza.size.description}"></span> <br/>
+  Crust: <span th:text="${pizza.crustType.description}"></span> <br/>
+  Toppings: <span th:each="topping, status : ${pizza.toppings}" th:text="${status.last ? topping.description : topping.description + ', '}"></span> <br/>
+  <span>----------</span> <br/>
+  Price: <span th:text="'$ ' + ${#numbers.formatDecimal(pizza.price, 0, 'COMMA', 2, 'POINT')}"></span>
+  </fieldset>
+  <br/>
+  </div>
+</body>
+</html>
