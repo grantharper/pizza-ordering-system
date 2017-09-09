@@ -44,10 +44,18 @@ public class PizzaController
   public String pizzaPost(ModelMap model, @PathVariable Long orderId, @ModelAttribute Pizza pizza)
   {
     Order order = orderRepo.findOne(orderId);
+    
+    Double pizzaPrice = 0.0;
+    
     for (Topping topping : pizza.getToppings())
     {
       topping.getPizzas().add(pizza);
+      pizzaPrice += topping.getPrice();
     }
+    
+    pizzaPrice += pizza.getCrustType().getPrice();
+    pizzaPrice += pizza.getSize().getPrice();
+    pizza.setPrice(pizzaPrice);
     pizza.setOrder(order);
     order.getPizzas().add(pizza);
 

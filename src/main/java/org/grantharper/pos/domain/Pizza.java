@@ -6,7 +6,6 @@ import java.util.TreeSet;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,6 +13,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+
+import org.grantharper.pos.enums.PizzaCrustEnum;
+import org.grantharper.pos.enums.PizzaSizeEnum;
 
 @Entity
 public class Pizza implements Comparable<Pizza>
@@ -24,10 +26,10 @@ public class Pizza implements Comparable<Pizza>
   @Column(name = "pizza_id")
   private Long pizzaId;
   
-  private String size;
+  private PizzaSizeEnum size;
   
   @Column(name = "crust_type")
-  private String crustType;
+  private PizzaCrustEnum crustType;
   
   @ManyToMany(cascade = CascadeType.ALL)
   @JoinTable(name = "pizza_topping", joinColumns=@JoinColumn(name = "pizza_id"), inverseJoinColumns = @JoinColumn(name = "topping_id"))
@@ -36,6 +38,8 @@ public class Pizza implements Comparable<Pizza>
   @ManyToOne
   @JoinColumn(name = "order_id")
   private Order order;
+  
+  private Double price;
 
   public Order getOrder()
   {
@@ -57,22 +61,22 @@ public class Pizza implements Comparable<Pizza>
     this.pizzaId = pizzaId;
   }
 
-  public String getSize()
+  public PizzaSizeEnum getSize()
   {
     return size;
   }
 
-  public void setSize(String size)
+  public void setSize(PizzaSizeEnum size)
   {
     this.size = size;
   }
 
-  public String getCrustType()
+  public PizzaCrustEnum getCrustType()
   {
     return crustType;
   }
 
-  public void setCrustType(String crustType)
+  public void setCrustType(PizzaCrustEnum crustType)
   {
     this.crustType = crustType;
   }
@@ -85,6 +89,18 @@ public class Pizza implements Comparable<Pizza>
   public void setToppings(Set<Topping> toppings)
   {
     this.toppings = toppings;
+  }
+  
+  
+
+  public Double getPrice()
+  {
+    return price;
+  }
+
+  public void setPrice(Double price)
+  {
+    this.price = price;
   }
 
   @Override

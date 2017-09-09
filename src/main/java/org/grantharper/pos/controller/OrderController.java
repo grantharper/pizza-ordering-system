@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.grantharper.pos.domain.Customer;
 import org.grantharper.pos.domain.Order;
+import org.grantharper.pos.domain.Pizza;
 import org.grantharper.pos.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,56 +20,81 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @RequestMapping(value = "/orders")
 public class OrderController
 {
-  
+
   @Autowired
   OrderRepository orderRepository;
-  
+
   @RequestMapping(value = "", method = RequestMethod.GET)
-  public String orderGet(ModelMap model, HttpServletRequest request){
-   
+  public String orderGet(ModelMap model, HttpServletRequest request)
+  {
+
     List<Order> orders = orderRepository.findAll();
-    
+
     model.put("orders", orders);
-    
+
     return "orders";
   }
-  
+
   @RequestMapping(value = "", method = RequestMethod.POST)
-  public String orderPost(ModelMap model, HttpServletRequest request, @ModelAttribute Order order){
-    
+  public String orderPost(ModelMap model, HttpServletRequest request, @ModelAttribute Order order)
+  {
+
     Customer customer = (Customer) request.getSession().getAttribute("customer");
     order.setCustomer(customer);
-    
+
     orderRepository.save(order);
-    
+
     return "redirect:/orders/" + order.getOrderId() + "/pizzas";
   }
-  
+
   @RequestMapping(value = "/{orderId}", method = RequestMethod.GET)
-  public String orderGetWithId(ModelMap model, @PathVariable Long orderId){
+  public String orderGetWithId(ModelMap model, @PathVariable Long orderId)
+  {
     Order order = orderRepository.findOne(orderId);
 
     model.put("order", order);
-    
+
     return "orders";
   }
-  
+
   @RequestMapping(value = "/{orderId}", method = RequestMethod.POST)
-  public String orderPostWithId(ModelMap model, HttpServletRequest request, @ModelAttribute Order order, @PathVariable Long orderId){
-    
+  public String orderPostWithId(ModelMap model, HttpServletRequest request, @ModelAttribute Order order,
+      @PathVariable Long orderId)
+  {
+
     return "redirect:/orders/" + order.getOrderId() + "/pizzas";
   }
-  
-  
+
   @RequestMapping(value = "/{orderId}/finalize", method = RequestMethod.POST)
-  public String orderPostFinalize(ModelMap model, HttpServletRequest request, @PathVariable Long orderId){
+  public String orderPostFinalize(ModelMap model, HttpServletRequest request, @PathVariable Long orderId)
+  {
     Order order = orderRepository.findOne(orderId);
+    evaluateFinalPrice(order);
     order.setCompleted(true);
     orderRepository.save(order);
-    
-    //could finalize the price and send email (more order finalization tasks)
-    
+
+    // could  send email (more order finalization tasks)
+
     return "redirect:/orders";
   }
-  
+
+  @RequestMapping(value = "/{orderId}/review", method = RequestMethod.GET)
+  public String orderPostReview(ModelMap model, HttpServletRequest request, @PathVariable Long orderId)
+  {
+    Order order = orderRepository.findOne(orderId);
+    evaluateFinalPrice(order);
+    model.put("order", order);
+    return "review-order";
+  }
+
+  private void evaluateFinalPrice(Order order)
+  {
+    Double finalPrice = 0.0;
+    for (Pizza pizza : order.getPizzas())
+    {
+      finalPrice += pizza.getPrice();
+    }
+    order.setFinalPrice(finalPrice);
+  }
+
 }

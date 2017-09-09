@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+	<h1>Review Order</h1>
+  <div th:replace="fragments/account :: logout"></div>
+  
+  <!-- This is for editing individual orders -->
+  <div th:if="${order} != null">
+  <div  th:each="pizza: ${order.pizzas}">
+  <fieldset>
+  <legend th:text="'Pizza #' + ${pizza.pizzaId}"></legend>
+  Size: <span th:text="${pizza.size.description}"></span> <br/>
+  Crust: <span th:text="${pizza.crustType.description}"></span> <br/>
+  Toppings: <span th:each="topping, status : ${pizza.toppings}" th:text="${status.last ? topping.description : topping.description + ', '}"></span> <br/>
+  Price: <span th:text="'$ ' + ${pizza.price}"></span>
+  </fieldset>
+  <br/>
+  </div>
+  <div>Total Price: <span th:text="'$ ' + ${order.finalPrice}"></span></div>
+  <form th:action="@{/orders/} + ${order.orderId} + '/finalize'" method="post">
+    <button>Finalize order</button>
+  </form>
+  <a th:href="@{/orders/} + ${order.orderId}">Back to order</a>
+  </div>
+
+  </body>
+</html>
