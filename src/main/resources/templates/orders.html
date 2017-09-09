@@ -9,7 +9,7 @@
   
   <!-- This is for editing individual orders -->
   <div th:if="${order} != null">
-  <div th:replace="fragments/pizza-details :: pizzaDetails"></div>
+  <div th:replace="fragments/pizza-details :: pizzaDetailsTransient"></div>
   <form th:action="@{/orders/} + ${order.orderId}" method="post">
     <button>Add pizza to order</button>
   </form>

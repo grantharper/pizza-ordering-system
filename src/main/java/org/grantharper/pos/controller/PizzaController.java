@@ -1,11 +1,14 @@
 package org.grantharper.pos.controller;
 
+import java.util.Optional;
+
 import org.grantharper.pos.domain.Order;
 import org.grantharper.pos.domain.Pizza;
 import org.grantharper.pos.domain.Topping;
 import org.grantharper.pos.enums.PizzaCrustEnum;
 import org.grantharper.pos.enums.PizzaSizeEnum;
 import org.grantharper.pos.repository.OrderRepository;
+import org.grantharper.pos.repository.PizzaRepository;
 import org.grantharper.pos.repository.ToppingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,6 +25,9 @@ public class PizzaController
 
   @Autowired
   private OrderRepository orderRepo;
+  
+  @Autowired
+  private PizzaRepository pizzaRepo;
 
   @Autowired
   private ToppingRepository toppingRepo;
@@ -64,4 +70,28 @@ public class PizzaController
     return "redirect:/orders/" + orderId;
   }
 
+  @RequestMapping(value = "/{pizzaId}/delete", method = RequestMethod.POST)
+  public String pizzaPostDelete(@PathVariable Long orderId, @PathVariable Long pizzaId){
+    Order order = orderRepo.findOne(orderId);
+    
+    Pizza pizzaToDelete = null;
+    for (Pizza pizza : order.getPizzas()){
+      if(pizza.getPizzaId().equals(pizzaId)){
+        pizzaToDelete = pizza;
+        
+      }
+    }
+    if(pizzaToDelete != null){
+      order.getPizzas().remove(pizzaToDelete);
+      pizzaToDelete.setOrder(null);
+    }
+    
+    //Optional<Pizza> pizza = order.getPizzas().stream().filter(a -> {return a.getPizzaId().equals(pizzaId);}).findFirst();
+    //pizza.ifPresent(a -> order.getPizzas().remove(a));
+    
+    orderRepo.save(order);
+    
+    return "redirect:/orders/" + orderId;
+  }
+  
 }
