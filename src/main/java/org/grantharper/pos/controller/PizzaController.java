@@ -74,6 +74,7 @@ public class PizzaController
   public String pizzaPostDelete(@PathVariable Long orderId, @PathVariable Long pizzaId){
     Order order = orderRepo.findOne(orderId);
     
+    //you must remember to remove the children in order for the cascades to work
     Pizza pizzaToDelete = null;
     for (Pizza pizza : order.getPizzas()){
       if(pizza.getPizzaId().equals(pizzaId)){
@@ -82,12 +83,10 @@ public class PizzaController
       }
     }
     if(pizzaToDelete != null){
+      pizzaToDelete.getToppings().clear();
       order.getPizzas().remove(pizzaToDelete);
       pizzaToDelete.setOrder(null);
     }
-    
-    //Optional<Pizza> pizza = order.getPizzas().stream().filter(a -> {return a.getPizzaId().equals(pizzaId);}).findFirst();
-    //pizza.ifPresent(a -> order.getPizzas().remove(a));
     
     orderRepo.save(order);
     
